@@ -300,11 +300,11 @@ public class InterfaceJogo {
 		lblNewLabel_2.setBounds(346, 75, 271, 14);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("<html>- As peças podem se movimentar em qualquer <br/> direção.</html>");
+		JLabel lblNewLabel_3 = new JLabel("<html>- As peï¿½as podem se movimentar em qualquer <br/> direï¿½ï¿½o.</html>");
 		lblNewLabel_3.setBounds(346, 92, 271, 26);
 		frame.getContentPane().add(lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel("<html>- Após escolher uma direção, a peça deve <br/> andar o máximo possível.</html>");
+		JLabel lblNewLabel_4 = new JLabel("<html>- Apï¿½s escolher uma direï¿½ï¿½o, a peï¿½a deve <br/> andar o mï¿½ximo possï¿½vel.</html>");
 		lblNewLabel_4.setBounds(346, 120, 271, 26);
 		frame.getContentPane().add(lblNewLabel_4);
 		
@@ -324,11 +324,11 @@ public class InterfaceJogo {
 		lblNewLabel_7.setBounds(346, 226, 271, 14);
 		frame.getContentPane().add(lblNewLabel_7);
 		
-		JLabel lblNewLabel_8 = new JLabel("<html>4 - Alinhamento horizontal das peças; <br/>             (alinhamento diagonal NÃO É PERMITIDO!);</html>");
+		JLabel lblNewLabel_8 = new JLabel("<html>4 - Alinhamento horizontal das peï¿½as; <br/>             (alinhamento diagonal Nï¿½O ï¿½ PERMITIDO!);</html>");
 		lblNewLabel_8.setBounds(346, 244, 271, 26);
 		frame.getContentPane().add(lblNewLabel_8);
 		
-		JLabel lblNewLabel_9 = new JLabel("<html>5 - Se alguma peça que esteja no canto for <br/> bloqueada por 3 peças do adversário, quem foi bloqueado ganha a partida.</html>");
+		JLabel lblNewLabel_9 = new JLabel("<html>5 - Se alguma peï¿½a que esteja no canto for <br/> bloqueada por 3 peï¿½as do adversï¿½rio, quem foi bloqueado ganha a partida.</html>");
 		lblNewLabel_9.setBounds(346, 272, 271, 51);
 		frame.getContentPane().add(lblNewLabel_9);
 	}
@@ -342,7 +342,6 @@ public class InterfaceJogo {
 			putValue(SHORT_DESCRIPTION, "conectar a Netgames Server");
 		}
 		public void actionPerformed(ActionEvent e) {
-			// Necessário definir endereço do servidor e nome do jogador
 			String mensagem = atorJogador.conectar("localhost", "nomeJogador?");
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
@@ -375,4 +374,37 @@ public class InterfaceJogo {
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
+
+	private void criarLabelMensagem(int dOrigem, int dBase, int dPosicao) {
+		labelMensagem = new JLabel("Jogo DAO - aguardando iniciar partida");
+		labelMensagem.setBounds((dOrigem+(2*dBase)), (dOrigem+(dOrigem/2)), (6*dPosicao), dBase);		
+		frame.getContentPane().add(labelMensagem);
+	}
+
+	public void notificar(String notificacao) {
+		JOptionPane.showMessageDialog(null, notificacao);
+	}
+
+	public void exibirEstado() {
+		EstadoDao estado;
+		estado = InterfaceJogo.informarEstado();
+		this.exibirMensagem(estado.informarMensagem());
+		this.exibirPosicoes(estado);
+	}
+
+	private void exibirMensagem(String mensagem) {
+		labelMensagem.setText(mensagem);
+	}	
+
+	public String obterNomeJogador() {
+		String nome = JOptionPane.showInputDialog("Qual o seu nome?");
+		return nome;
+	}
+
+	public String obterEnderecoServidor() {
+		String idServidor = ("localhost");
+		idServidor = JOptionPane.showInputDialog(null, "Insira o endereco do servidor", idServidor);
+		return idServidor;
+	}
+
 }
