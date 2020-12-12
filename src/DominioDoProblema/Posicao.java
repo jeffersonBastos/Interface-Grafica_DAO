@@ -13,18 +13,26 @@ public class Posicao {
 	}
 	
 	public void definirOcupante(Jogador jogador) {
-		
+		this.ocupante = jogador;		
+	}
+	
+	public void setSemOcupante() {
+		this.ocupante = null;
 	}
 	
 	public boolean informarOcupada() {
-		return false;
+		if(ocupante == null) {
+			return false;
+		}
+		return true;
 	}
 	
 	public int getLinha() {
-		return 0;
+		return this.linha;
 	}
 	
-	public void getColuna() {
+	public int getColuna() {
+		return this.coluna;
 		
 	}
 	
