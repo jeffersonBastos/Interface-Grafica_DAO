@@ -14,11 +14,17 @@ public class AtorNetgames implements OuvidorProxy {
 	
 	private static final long serialVersionUID = 1L;
 	protected Proxy proxy;
+	protected AtorJogador atorJogador;
+	protected boolean conectado = false;
 	
 	public AtorNetgames() {
 		super();
 		this.proxy = Proxy.getInstance();
 		proxy.addOuvinte(this);	
+	}
+
+	public void definirAtorJogador(AtorJogador ator) {
+		atorJogador = ator;
 	}
 	
 	public String conectar(String servidor, String nome) {
@@ -37,6 +43,7 @@ public class AtorNetgames implements OuvidorProxy {
 				e.printStackTrace();
 				return "Voce esqueceu o arquivo de propriedades";
 			}
+			this.definirConectado(true);
 			return "Sucesso: conectado a Netgames Server";
 		
 	}
@@ -49,6 +56,7 @@ public class AtorNetgames implements OuvidorProxy {
 				e.printStackTrace();
 				return "Voce nao esta conectado";
 			}
+			this.definirConectado(false);
 			return "Sucesso: desconectado de Netgames Server";
 	}
 
@@ -65,31 +73,30 @@ public class AtorNetgames implements OuvidorProxy {
 
 	@Override
 	public void iniciarNovaPartida(Integer posicao) {
-		// TODO Auto-generated method stub
+		int indiceAdversario = 1;
+		if(posicao.equals(1)) indiceAdversario = 2;
+		String adversario = proxy.obterNomeAdversario(indiceAdversario);
+		atorJogador.iniciarNovaPartida(posicao, adversario);
 		JOptionPane.showMessageDialog(null, "o servidor enviou solicitacao de inicio de partida e isso deve ser tratado segundo as regras do seu jogo");
 	}
 
 	@Override
 	public void finalizarPartidaComErro(String message) {
-		// TODO Auto-generated method stub
-		
+		atorJogador.encerrarPartida();
 	}
 
 	@Override
 	public void receberMensagem(String msg) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void receberJogada(Jogada jogada) {
-		// TODO Auto-generated method stub
-		
+		atorJogador.receberJogada((Lance) jogada);
 	}
 
 	@Override
 	public void tratarConexaoPerdida() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -98,5 +105,33 @@ public class AtorNetgames implements OuvidorProxy {
 		
 	}
 	
+	public void enviarJogada(Lance lance) {
+		try {
+			proxy.enviaJogada(lance);
+		} catch (NaoJogandoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public boolean informarConectado() {
+		return conectado;
+	}
+
+	public void definirConectado(boolean valor) {
+		conectado = valor;
+	}
+
+	public void encerrarPartida() {
+		try {
+			proxy.finalizarPartida();
+		} catch (NaoConectadoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NaoJogandoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
