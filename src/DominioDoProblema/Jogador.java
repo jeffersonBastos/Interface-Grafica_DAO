@@ -14,12 +14,9 @@ public class Jogador {
 		this.vencedor = vencedor;
 	}
 	
-	public boolean ehSeuTurno() {
-		return false;
-	}
 	
 	public boolean informarTurno() {
-		return false;
+		return seuTurno;
 	}
 	
 	public void iniciar() {
@@ -33,17 +30,23 @@ public class Jogador {
 	public void definirComoPrimeiro() {
 		
 	}
-	
+	public int getCor() {
+		return cor;
+	}
 	public void inverterTurno() {
-		
+		if(seuTurno == true) {
+			seuTurno = false;
+		}else {
+			seuTurno = true;
+		}
 	}
 	
 	public String informarNome() {
-		return null;
+		return nome;
 	}
 	
 	public boolean informarVencedor() {
-		return false;
+		return vencedor;
 	}
 	
 	public boolean avaliarCondicaoVitoria(Jogador jogador) {

@@ -5,20 +5,23 @@ import DominioDoProblema.Posicao;
 
 public class Tabuleiro {
 	
-	protected Posicao posicoes[][];
+	protected Posicao posicoes[][]; 
 	protected Jogador jogadorLocal;
 	protected Jogador jogadorRemoto;
 	protected boolean partidaEmAndamento;
 	protected boolean jogadaEmAndamento;
 	
-	public Tabuleiro (Posicao posicoes[][], Jogador jogadorLocal, Jogador jogadorRemoto, 
-			boolean partidaEmAndamento, boolean jogadaEmAndamento ) {
-		
-		this.posicoes = posicoes;
-		this.jogadorLocal = jogadorLocal;
-		this.jogadorRemoto = jogadorRemoto;
-		this.partidaEmAndamento = partidaEmAndamento;
-		this.partidaEmAndamento = jogadaEmAndamento;
+	public Tabuleiro () {
+		posicoes =  new Posicao[4][4];
+		this.inicia();
+	}
+	public void inicia() {
+		for (int linha=0; linha<4; linha++) {
+			for (int coluna=0; coluna<4; coluna++) {
+				posicoes[linha][coluna] = new Posicao(linha, coluna);
+			}
+			
+		}
 	}
 	
 	public void efetuarMovimentoPedra(int linha, int coluna, Jogador jogador) {
@@ -26,7 +29,7 @@ public class Tabuleiro {
 	}
 	
 	public Posicao obterPosicao(int linha, int coluna) {
-		return null;
+		return posicoes[linha][coluna];
 	}
 	
 	public void definirJogadaEmAndamento(boolean valor) {
@@ -72,23 +75,64 @@ public class Tabuleiro {
 	public void atualizarEstado(Lance lance) {
 		
 	}
-	
 	public void avaliarEncerramentoPartida() {
 		
 	}
 	
 	public RenquePosicao informarLinha(int indice) {
-		return null;
+		Posicao linha[] = new Posicao[4];
+		for(int coluna = 0;coluna > 4; coluna ++) {
+			linha[coluna] = posicoes[indice][coluna];	
+		}
+		RenquePosicao renqueLinha = new RenquePosicao(linha, false);
+		return renqueLinha;
 	}
-	
 	public RenquePosicao informarColuna(int indice) {
-		return null;
+		Posicao coluna[] = new Posicao[4];
+		for(int linha = 0;linha > 4; linha ++) {
+			coluna[linha] = posicoes[linha][indice];	
+		}
+		RenquePosicao renqueLinha = new RenquePosicao(coluna, false);
+		return renqueLinha;
 	}
-	
 	public RenquePosicao informaCanto(int indiceCanto) {
-		return null;
+		Posicao canto[] = new Posicao[4];
+		switch (indiceCanto) {
+		case 1:
+			canto[0] = posicoes[0][0];
+			canto[1] = posicoes[0][1];
+			canto[2] = posicoes[1][1];
+			canto[3] = posicoes[1][0];
+			break;
+		case 2:
+			canto[0] = posicoes[0][3];
+			canto[1] = posicoes[0][2];
+			canto[2] = posicoes[1][2];
+			canto[3] = posicoes[1][3];
+			break;
+		case 3:
+			canto[0] = posicoes[3][0];
+			canto[1] = posicoes[3][1];
+			canto[2] = posicoes[2][1];
+			canto[3] = posicoes[2][0];
+			break;
+		case 4:
+			canto[0] = posicoes[3][3];
+			canto[1] = posicoes[2][3];
+			canto[2] = posicoes[2][2];
+			canto[3] = posicoes[3][2];
+			break;
+
+		default:
+			break;
+		}
+		RenquePosicao renqueLinha = new RenquePosicao(canto, true);
+		return renqueLinha;	
 	}
-	public boolean avaliaMoviemtoLinha(int linhaAtual, int colunaAtual, int colunaAntiga, int diferencaColuna) {		    
+	public boolean avaliaMovimentoLinha(int linhaAtual, int colunaAtual, int colunaAntiga, int diferencaColuna) {		    
+		
+		
+		
 		if(diferencaColuna > 0){
 			//andou pra direita
 			if (colunaAtual != 3){
@@ -219,6 +263,9 @@ public class Tabuleiro {
 		return false;
 	}	
 	public boolean avaliarMovimento(Posicao posicaoAntiga, Posicao posicaoAtual) {
+		
+		System.out.println("RONALDO");
+		
 		int linhaAntiga = posicaoAntiga.getLinha();
 		int colunaAntiga = posicaoAntiga.getColuna();
 		int linhaAtual = posicaoAtual.getLinha();
@@ -228,17 +275,22 @@ public class Tabuleiro {
 
 		if(linhaAtual == linhaAntiga && linhaAntiga == linhaAtual) {
 			//NAO ANDOU
+			System.out.println("Ronaldo- nao andou");
 			return false;
 		}else if(linhaAntiga == linhaAtual){
-			//ANDOU EM LINHA		    
-			return this.avaliaMoviemtoLinha(linhaAtual, colunaAtual, colunaAntiga, diferencaColuna);
+			//ANDOU EM LINHA
+			System.out.println("Ronaldo- andou linha");
+			return this.avaliaMovimentoLinha(linhaAtual, colunaAtual, colunaAntiga, diferencaColuna);
 		} else if(colunaAntiga == colunaAtual){
 			//ANDOU EM COLUNA
+			System.out.println("Ronaldo- andou coluna");
 			return this.avaliaMovimentoColuna(colunaAtual, linhaAtual, linhaAntiga, diferencaLinha);
 		}else if( Math.abs(colunaAtual - colunaAntiga) == Math.abs(linhaAtual - linhaAntiga)  ){
 			//ANDOU EM DIAGONAL
+			System.out.println("Ronaldo- andou diagona");
 			return this.avaliaMovimentoDiagonal(linhaAtual, linhaAntiga, colunaAntiga, colunaAtual, diferencaLinha);
 		}else {
+			System.out.println("Ronaldo- caiu no ultimo else");
 			return false;
 		}	
 	}	

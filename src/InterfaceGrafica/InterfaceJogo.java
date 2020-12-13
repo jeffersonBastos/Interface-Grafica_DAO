@@ -9,6 +9,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import DominioDoProblema.Tabuleiro;
+
 import javax.swing.JMenu;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
@@ -32,7 +35,15 @@ public class InterfaceJogo {
 	private AtorJogador atorJogador;
 	private Boolean primeiraAcao = true;
 	private Boolean pecaBrancaSelecionada;
-
+	
+	
+	int linhaAntiga;
+	int colunaAntiga;
+	int linhaAtual;
+	int colunaAtual;
+	
+	private Tabuleiro tabuleiro = new Tabuleiro();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -48,11 +59,17 @@ public class InterfaceJogo {
 			}
 		});
 	}
-	public void move(JButton button) {
+	public void move(JButton button, int linha, int coluna) {
 		if(primeiraAcao) {
+			System.out.println("primeira açao");
 			removePeca(button);
+			linhaAntiga = linha;
+			colunaAntiga = coluna;
 		}else {
-			putPeca(button);
+			System.out.println("2 ação");
+			putPeca(button, linhaAntiga, colunaAntiga, linha, coluna);
+			linhaAtual = linha;
+			colunaAtual = coluna;
 		}
 		
 				
@@ -62,17 +79,27 @@ public class InterfaceJogo {
 			button.setIcon(posicaoVazia);
 			primeiraAcao = false;
 			pecaBrancaSelecionada = true;
+			System.out.println("RODALDO");
 		} else if (button.getIcon().equals(pecaPreta)) {
 			button.setIcon(posicaoVazia);
 			primeiraAcao = false;
 			pecaBrancaSelecionada = false;
+			System.out.println("RONALDO");
 		}		
 	} 
-	public void putPeca(JButton button) {
+	public void putPeca(JButton button, int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
+		System.out.println( "resultado-"+tabuleiro.avaliarMovimento(tabuleiro.obterPosicao(linhaAntiga, colunaAntiga), tabuleiro.obterPosicao(linhaAtual, colunaAtual)));
+		System.out.println("RONALDO");
+
+
 		if(button.getIcon().equals(posicaoVazia)) {
+			
 			if(pecaBrancaSelecionada) {
+									
+				
 				button.setIcon(pecaBranca);
 				primeiraAcao = true;
+				
 			} else {
 				button.setIcon(pecaPreta);
 				primeiraAcao = true;
@@ -95,7 +122,7 @@ public class InterfaceJogo {
 	 */
 	private void initialize() {
 		atorJogador = new AtorJogador();
-		
+				
 		frame = new JFrame();
 		frame.setBounds(100, 100, 642, 413);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -121,166 +148,168 @@ public class InterfaceJogo {
 		mnNewMenu.add(mntmIniciarPartida);
 		
 		
+		
+		
+		JButton button_00 = new JButton("");
+		button_00.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				move(button_00, 1, 1);
+			}
+		});
+		button_00.setHideActionText(true);
+		button_00.setIcon(pecaPreta);
+		button_00.setBounds(10, 32, 80, 80);
+		frame.getContentPane().add(button_00);
+		
+		JButton button_10 = new JButton("");
+		button_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				move(button_10,1,0);
+			}
+		});
+		button_10.setIcon(posicaoVazia);
+		button_10.setBounds(10, 114, 80, 80);
+		frame.getContentPane().add(button_10);
+		
+		JButton button_20 = new JButton("");
+		button_20.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				move(button_20,2,0);
+			}
+		});
+		button_20.setIcon(posicaoVazia);
+		button_20.setBounds(10, 196, 80, 80);
+		frame.getContentPane().add(button_20);
+		
 		JButton button_11 = new JButton("");
 		button_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_11);
+				move(button_11,1,1);
 			}
 		});
-		button_11.setHideActionText(true);
 		button_11.setIcon(pecaPreta);
-		button_11.setBounds(10, 32, 80, 80);
+		button_11.setBounds(92, 114, 80, 80);
 		frame.getContentPane().add(button_11);
+		
+		JButton button_01 = new JButton("");
+		button_01.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				move(button_01,0,1);
+			}
+		});
+		button_01.setIcon(posicaoVazia);
+		button_01.setBounds(92, 32, 80, 80);
+		frame.getContentPane().add(button_01);
 		
 		JButton button_21 = new JButton("");
 		button_21.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_21);
+				move(button_21,2,1);
 			}
 		});
-		button_21.setIcon(posicaoVazia);
-		button_21.setBounds(10, 114, 80, 80);
+		button_21.setIcon(pecaBranca);
+		button_21.setBounds(92, 196, 80, 80);
 		frame.getContentPane().add(button_21);
-		
-		JButton button_31 = new JButton("");
-		button_31.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				move(button_31);
-			}
-		});
-		button_31.setIcon(posicaoVazia);
-		button_31.setBounds(10, 196, 80, 80);
-		frame.getContentPane().add(button_31);
-		
-		JButton button_22 = new JButton("");
-		button_22.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				move(button_22);
-			}
-		});
-		button_22.setIcon(pecaPreta);
-		button_22.setBounds(92, 114, 80, 80);
-		frame.getContentPane().add(button_22);
 		
 		JButton button_12 = new JButton("");
 		button_12.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_12);
+				move(button_12,1,2);
 			}
 		});
-		button_12.setIcon(posicaoVazia);
-		button_12.setBounds(92, 32, 80, 80);
+		button_12.setIcon(pecaBranca);
+		button_12.setBounds(174, 114, 80, 80);
 		frame.getContentPane().add(button_12);
 		
-		JButton button_32 = new JButton("");
-		button_32.addActionListener(new ActionListener() {
+		JButton button_22 = new JButton("");
+		button_22.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_32);
+				move(button_22,2,2);
 			}
 		});
-		button_32.setIcon(pecaBranca);
-		button_32.setBounds(92, 196, 80, 80);
-		frame.getContentPane().add(button_32);
+		button_22.setIcon(pecaPreta);
+		button_22.setBounds(174, 196, 80, 80);
+		frame.getContentPane().add(button_22);
 		
-		JButton button_23 = new JButton("");
-		button_23.addActionListener(new ActionListener() {
+		JButton button_02 = new JButton("");
+		button_02.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_23);
+				move(button_02,0,2);
 			}
 		});
-		button_23.setIcon(pecaBranca);
-		button_23.setBounds(174, 114, 80, 80);
-		frame.getContentPane().add(button_23);
+		button_02.setIcon(posicaoVazia);
+		button_02.setBounds(174, 32, 80, 80);
+		frame.getContentPane().add(button_02);
 		
-		JButton button_33 = new JButton("");
-		button_33.addActionListener(new ActionListener() {
+		JButton button_03 = new JButton("");
+		button_03.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_33);
+				move(button_03,0,3);
 			}
 		});
-		button_33.setIcon(pecaPreta);
-		button_33.setBounds(174, 196, 80, 80);
-		frame.getContentPane().add(button_33);
+		button_03.setIcon(pecaBranca);
+		button_03.setBounds(256, 32, 80, 80);
+		frame.getContentPane().add(button_03);
 		
 		JButton button_13 = new JButton("");
 		button_13.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_13);
+				move(button_13,1,3);
 			}
 		});
 		button_13.setIcon(posicaoVazia);
-		button_13.setBounds(174, 32, 80, 80);
+		button_13.setBounds(256, 114, 80, 80);
 		frame.getContentPane().add(button_13);
 		
-		JButton button_14 = new JButton("");
-		button_14.addActionListener(new ActionListener() {
+		JButton button_23 = new JButton("");
+		button_23.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_14);
+				move(button_23,2,3);			
 			}
 		});
-		button_14.setIcon(pecaBranca);
-		button_14.setBounds(256, 32, 80, 80);
-		frame.getContentPane().add(button_14);
+		button_23.setIcon(posicaoVazia);
+		button_23.setBounds(256, 196, 80, 80);
+		frame.getContentPane().add(button_23);
 		
-		JButton button_24 = new JButton("");
-		button_24.addActionListener(new ActionListener() {
+		JButton button_30 = new JButton("");
+		button_30.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_24);
+				move(button_30,3,0);
 			}
 		});
-		button_24.setIcon(posicaoVazia);
-		button_24.setBounds(256, 114, 80, 80);
-		frame.getContentPane().add(button_24);
+		button_30.setIcon(pecaBranca);
+		button_30.setBounds(10, 278, 80, 80);
+		frame.getContentPane().add(button_30);
 		
-		JButton button_34 = new JButton("");
-		button_34.addActionListener(new ActionListener() {
+		JButton button_31 = new JButton("");
+		button_31.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_34);			
+				move(button_31,3,1);
 			}
 		});
-		button_34.setIcon(posicaoVazia);
-		button_34.setBounds(256, 196, 80, 80);
-		frame.getContentPane().add(button_34);
+		button_31.setIcon(posicaoVazia);
+		button_31.setBounds(92, 278, 80, 80);
+		frame.getContentPane().add(button_31);
 		
-		JButton button_41 = new JButton("");
-		button_41.addActionListener(new ActionListener() {
+		JButton button_32 = new JButton("");
+		button_32.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_41);
+				move(button_32,3,2);
 			}
 		});
-		button_41.setIcon(pecaBranca);
-		button_41.setBounds(10, 278, 80, 80);
-		frame.getContentPane().add(button_41);
+		button_32.setIcon(posicaoVazia);
+		button_32.setBounds(174, 278, 80, 80);
+		frame.getContentPane().add(button_32);
 		
-		JButton button_42 = new JButton("");
-		button_42.addActionListener(new ActionListener() {
+		JButton button_33 = new JButton("");
+		button_33.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_42);
+				move( button_33,3,3);
 			}
 		});
-		button_42.setIcon(posicaoVazia);
-		button_42.setBounds(92, 278, 80, 80);
-		frame.getContentPane().add(button_42);
-		
-		JButton button_43 = new JButton("");
-		button_43.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				move(button_43);
-			}
-		});
-		button_43.setIcon(posicaoVazia);
-		button_43.setBounds(174, 278, 80, 80);
-		frame.getContentPane().add(button_43);
-		
-		JButton button_44 = new JButton("");
-		button_44.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				move( button_44);
-			}
-		});
-		button_44.setIcon(pecaPreta);
-		button_44.setBounds(256, 278, 80, 80);
-		frame.getContentPane().add(button_44);
+		button_33.setIcon(pecaPreta);
+		button_33.setBounds(256, 278, 80, 80);
+		frame.getContentPane().add(button_33);
 		
 		JPanel panelFundoTabuleiro = new JPanel();
 		panelFundoTabuleiro.setBackground(Color.BLACK);
@@ -300,11 +329,11 @@ public class InterfaceJogo {
 		lblNewLabel_2.setBounds(346, 75, 271, 14);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("<html>- As pe�as podem se movimentar em qualquer <br/> dire��o.</html>");
+		JLabel lblNewLabel_3 = new JLabel("<html>- As peças podem se movimentar em qualquer <br/> direção.</html>");
 		lblNewLabel_3.setBounds(346, 92, 271, 26);
 		frame.getContentPane().add(lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel("<html>- Ap�s escolher uma dire��o, a pe�a deve <br/> andar o m�ximo poss�vel.</html>");
+		JLabel lblNewLabel_4 = new JLabel("<html>- Após escolher uma direção, a peça deve <br/> andar o máximo possível.</html>");
 		lblNewLabel_4.setBounds(346, 120, 271, 26);
 		frame.getContentPane().add(lblNewLabel_4);
 		
@@ -324,11 +353,11 @@ public class InterfaceJogo {
 		lblNewLabel_7.setBounds(346, 226, 271, 14);
 		frame.getContentPane().add(lblNewLabel_7);
 		
-		JLabel lblNewLabel_8 = new JLabel("<html>4 - Alinhamento horizontal das pe�as; <br/>             (alinhamento diagonal N�O � PERMITIDO!);</html>");
+		JLabel lblNewLabel_8 = new JLabel("<html>4 - Alinhamento horizontal das peças; <br/>             (alinhamento diagonal NÃO É PERMITIDO!);</html>");
 		lblNewLabel_8.setBounds(346, 244, 271, 26);
 		frame.getContentPane().add(lblNewLabel_8);
 		
-		JLabel lblNewLabel_9 = new JLabel("<html>5 - Se alguma pe�a que esteja no canto for <br/> bloqueada por 3 pe�as do advers�rio, quem foi bloqueado ganha a partida.</html>");
+		JLabel lblNewLabel_9 = new JLabel("<html>5 - Se alguma peça que esteja no canto for <br/> bloqueada por 3 peças do adversário, quem foi bloqueado ganha a partida.</html>");
 		lblNewLabel_9.setBounds(346, 272, 271, 51);
 		frame.getContentPane().add(lblNewLabel_9);
 	}
@@ -342,7 +371,8 @@ public class InterfaceJogo {
 			putValue(SHORT_DESCRIPTION, "conectar a Netgames Server");
 		}
 		public void actionPerformed(ActionEvent e) {
-			String mensagem = atorJogador.conectar("localhost", "nomeJogador?");
+			// Necessário definir endereço do servidor e nome do jogador
+			String mensagem = atorJogador.conectar("netgames.labsoft.ufsc.br", "nomeJogador?");
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -350,6 +380,7 @@ public class InterfaceJogo {
 		/**
 		 * 
 		 */
+		
 		private static final long serialVersionUID = 1L;
 		public SwingAction_1() {
 			putValue(NAME, "desconectar");
@@ -374,37 +405,4 @@ public class InterfaceJogo {
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
-
-	private void criarLabelMensagem(int dOrigem, int dBase, int dPosicao) {
-		labelMensagem = new JLabel("Jogo DAO - aguardando iniciar partida");
-		labelMensagem.setBounds((dOrigem+(2*dBase)), (dOrigem+(dOrigem/2)), (6*dPosicao), dBase);		
-		frame.getContentPane().add(labelMensagem);
-	}
-
-	public void notificar(String notificacao) {
-		JOptionPane.showMessageDialog(null, notificacao);
-	}
-
-	public void exibirEstado() {
-		EstadoDao estado;
-		estado = InterfaceJogo.informarEstado();
-		this.exibirMensagem(estado.informarMensagem());
-		this.exibirPosicoes(estado);
-	}
-
-	private void exibirMensagem(String mensagem) {
-		labelMensagem.setText(mensagem);
-	}	
-
-	public String obterNomeJogador() {
-		String nome = JOptionPane.showInputDialog("Qual o seu nome?");
-		return nome;
-	}
-
-	public String obterEnderecoServidor() {
-		String idServidor = ("localhost");
-		idServidor = JOptionPane.showInputDialog(null, "Insira o endereco do servidor", idServidor);
-		return idServidor;
-	}
-
 }
