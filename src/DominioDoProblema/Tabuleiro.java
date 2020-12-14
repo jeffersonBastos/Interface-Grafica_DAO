@@ -22,9 +22,18 @@ public class Tabuleiro {
 		for (int linha=0; linha<4; linha++) {
 			for (int coluna=0; coluna<4; coluna++) {
 				posicoes[linha][coluna] = new Posicao(linha, coluna);
-			}
-			
+			}	
 		}
+		posicoes[3][0].definirOcupante(jogadorLocal); 
+		posicoes[2][1].definirOcupante(jogadorLocal);
+		posicoes[1][2].definirOcupante(jogadorLocal);
+		posicoes[0][3].definirOcupante(jogadorLocal);
+
+		posicoes[0][0].definirOcupante(jogadorRemoto);
+		posicoes[1][1].definirOcupante(jogadorRemoto);
+		posicoes[2][2].definirOcupante(jogadorRemoto);
+		posicoes[3][3].definirOcupante(jogadorRemoto);
+
 	}
 	
 	public void efetuarMovimentoPedra(Posicao posicaoAntiga, Posicao posicaoAtual) {
@@ -218,22 +227,34 @@ public class Tabuleiro {
 			adversario = jogadorLocal;		}
 		for (int indice=0; indice<4; indice++) {		// avaliacao de linhas
 			auxLinha = this.informarLinha(indice);
-			if (!adversarioVencedor) adversarioVencedor = auxLinha.avaliarCondicaoVitoria(adversario);
-			if (!adversarioVencedor) 
-				if (!registroTurnoVencedor) registroTurnoVencedor = auxLinha.avaliarCondicaoVitoria(jogadorTurno);
-		}
-		if (!adversarioVencedor) {
-			for (int indice=0; indice<6; indice++) {	// avaliacao de colunas
-				auxColuna = this.informarColuna(indice);
-				if (!adversarioVencedor) adversarioVencedor = auxColuna.avaliarCondicaoVitoria(adversario);
-				if (!adversarioVencedor) 
-					if (!registroTurnoVencedor) registroTurnoVencedor = auxColuna.avaliarCondicaoVitoria(jogadorTurno);
+			if (!adversarioVencedor) {
+				adversarioVencedor = auxLinha.avaliarCondicaoVitoria(adversario);
+			}
+			if (!adversarioVencedor) { 
+				if (!registroTurnoVencedor) {
+					registroTurnoVencedor = auxLinha.avaliarCondicaoVitoria(jogadorTurno);
+				}
 			}
 		}
 		if (!adversarioVencedor) {
-			for (int indice=0; indice<6; indice++) {	// avaliacao de cantos
+			for (int indice=0; indice<4; indice++) {	// avaliacao de colunas
+				auxColuna = this.informarColuna(indice);
+				if (!adversarioVencedor) {
+					adversarioVencedor = auxColuna.avaliarCondicaoVitoria(adversario);
+				}
+				if (!adversarioVencedor) { 
+					if (!registroTurnoVencedor) {
+						registroTurnoVencedor = auxColuna.avaliarCondicaoVitoria(jogadorTurno);
+					}
+				}
+			}
+		}
+		if (!adversarioVencedor) {
+			for (int indice=0; indice<4; indice++) {	// avaliacao de cantos
 				auxCanto = this.informarCanto(indice);
-				if (!adversarioVencedor) adversarioVencedor = auxCanto.avaliarCondicaoVitoria(adversario);
+				if (!adversarioVencedor) {
+					adversarioVencedor = auxCanto.avaliarCondicaoVitoria(adversario);
+				}
 				if (!adversarioVencedor) 
 					if (!registroTurnoVencedor) registroTurnoVencedor = auxCanto.avaliarCondicaoVitoria(jogadorTurno);
 			}

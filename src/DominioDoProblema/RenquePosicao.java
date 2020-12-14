@@ -12,7 +12,7 @@ public class RenquePosicao {
 	public boolean avaliarCondicaoVitoria(Jogador jogador) {
 		int contagem = 0;
 		for(int i = 0;i< 4; i++) {
-			if(posicoes[i].ocupadaPor(jogador)   ) {
+			if( posicoes[i].ocupadaPor(jogador)   ) {
 				contagem ++;
 			}			
 		}

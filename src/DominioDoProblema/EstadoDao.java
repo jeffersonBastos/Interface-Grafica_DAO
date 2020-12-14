@@ -9,7 +9,15 @@ public class EstadoDao {
 	
 	
 	public EstadoDao() {
-		
+		valoresTabuleiro[3][0] = 1;
+		valoresTabuleiro[2][1] = 1;
+		valoresTabuleiro[1][2] = 1;
+		valoresTabuleiro[0][3] = 1;
+
+		valoresTabuleiro[0][0] = 2;
+		valoresTabuleiro[1][1] = 2;
+		valoresTabuleiro[2][2] = 2;
+		valoresTabuleiro[3][3] = 2;
 	}
 
 	public EstadoDao(Lance lance) {
