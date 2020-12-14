@@ -64,13 +64,14 @@ public class AtorJogador {
 	}
 	
 	public boolean iniciarPartida() {
-		
 		boolean conectado = ngServer.informarConectado();
 		boolean atualizarInterface = false;
 		if(conectado) {
+			System.out.println("ronado-conectado");
 			atualizarInterface = tabuleiro.encerrarPartida();
 			if (atualizarInterface) ngServer.encerrarPartida();
-			ngServer.iniciarPartida();
+			String nout = ngServer.iniciarPartida();
+			System.out.println("ronado-conectado" + nout );
 		} else {
 			gui.notificar("Voce nao esta conectado");
 		}
@@ -86,6 +87,7 @@ public class AtorJogador {
 		tabuleiro.iniciarNovaPartida(ordem, adversario);
 		gui.exibirEstado();
 	}
+	
 	public void encerrarPartida() {
 		boolean atualizar = tabuleiro.encerrarPartida();
 		gui.notificar("Partida finalizada");
@@ -93,8 +95,8 @@ public class AtorJogador {
 	}
 	
 
-	public String movimentarPedra(int linha, int coluna) {
-		String notificacao = tabuleiro.movimentarPedra(linha, coluna);
+	public String movimentarPedra(int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
+		String notificacao = tabuleiro.movimentarPedra(linhaAntiga, colunaAntiga, linhaAtual, colunaAtual);
 		if (notificacao == "") {
 			EstadoDao estado = tabuleiro.informarEstado();
 			Lance lance = estado.informarLance();

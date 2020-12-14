@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import DominioDoProblema.EstadoDao;
-import DominioDoProblema.Tabuleiro;
 
 import javax.swing.JMenu;
 import javax.swing.AbstractAction;
@@ -37,7 +36,7 @@ public class InterfaceJogo {
 	private Boolean primeiraAcao = true;
 	private Boolean pecaBrancaSelecionada;
 	
-	private JLabel labelMensagem = null;
+	private JLabel labelMensagem;
 
 	JButton button_00 = new JButton("");
 	JButton button_10 = new JButton("");
@@ -66,7 +65,6 @@ public class InterfaceJogo {
 	int linhaAtual;
 	int colunaAtual;
 	
-	private Tabuleiro tabuleiro = new Tabuleiro();
 	
 	/**
 	 * Launch the application.
@@ -169,14 +167,19 @@ public class InterfaceJogo {
 		
 		JLabel lblNewLabel_9 = new JLabel("<html>5 - Se alguma peça que esteja no canto for <br/> bloqueada por 3 peças do adversário, quem foi bloqueado ganha a partida.</html>");
 		lblNewLabel_9.setBounds(346, 272, 271, 51);
-		frame.getContentPane().add(lblNewLabel_9);		
+		frame.getContentPane().add(lblNewLabel_9);	
+		
+		labelMensagem = new JLabel("AQUI");
+		labelMensagem.setBounds(346, 290, 271, 90);
+		frame.getContentPane().add(labelMensagem);	
+		
 	}
 
 	public void criarMatrizTabuleiro() {
 
 		button_00.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				move(button_00, 1, 1);
+				move(button_00, 0, 0);
 			}
 		});
 		
@@ -368,10 +371,9 @@ public class InterfaceJogo {
 		estado = atorJogador.informarEstado();
 		this.exibirMensagem(estado.informarMensagem());
 		this.exibirTabuleiro(estado);
+		
 	}
-	private void exibirMensagem(String mensagem) {
-		labelMensagem.setText(mensagem);
-	}	
+	
 	
 	public void move(JButton button, int linha, int coluna) {
 		if(primeiraAcao) {
@@ -393,34 +395,33 @@ public class InterfaceJogo {
 			button.setIcon(posicaoVazia);
 			primeiraAcao = false;
 			pecaBrancaSelecionada = true;
-			System.out.println("RODALDO");
 		} else if (button.getIcon().equals(pecaPreta)) {
 			button.setIcon(posicaoVazia);
 			primeiraAcao = false;
 			pecaBrancaSelecionada = false;
-			System.out.println("RONALDO");
 		}		
 	} 
 	public void putPeca(JButton button, int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
-		System.out.println( "resultado-"+tabuleiro.avaliarMovimento(tabuleiro.obterPosicao(linhaAntiga, colunaAntiga), tabuleiro.obterPosicao(linhaAtual, colunaAtual)));
 		System.out.println("RONALDO");
-
-
+		
 		if(button.getIcon().equals(posicaoVazia)) {
-			
-			if(pecaBrancaSelecionada) {
-									
-				
-				button.setIcon(pecaBranca);
-				primeiraAcao = true;
-				
-			} else {
-				button.setIcon(pecaPreta);
-				primeiraAcao = true;
+			String notificacao = atorJogador.movimentarPedra(linhaAntiga, colunaAntiga, linhaAtual, colunaAtual);
+			if(notificacao.equals("")) {
+				if(pecaBrancaSelecionada) {
+					button.setIcon(pecaBranca);
+					primeiraAcao = true;
+					
+				} else {
+					button.setIcon(pecaPreta);
+					primeiraAcao = true;
+				}
+			}else {
+				JOptionPane.showMessageDialog(null, notificacao);
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Casa ocupada");
 		}
+		
 	} 
 	
 	public String obterNomeJogador() {
@@ -447,7 +448,6 @@ public class InterfaceJogo {
 			atorJogador.conectar();
 		}
 	}
-	
 	private class SwingAction_1 extends AbstractAction {
 		/**
 		 * 
@@ -473,11 +473,16 @@ public class InterfaceJogo {
 		}
 		public void actionPerformed(ActionEvent e) {
 			boolean atualizarInterface = atorJogador.iniciarPartida();
-			if (atualizarInterface) exibirEstado();
+			if (atualizarInterface) {
+				exibirEstado();
+			}
 		}
 	}
 	
-
+	private void exibirMensagem(String mensagem) {
+		labelMensagem.setText(mensagem);
+	}	
+	
 	public void notificar(String notificacao) {
 		JOptionPane.showMessageDialog(null, notificacao);
 	}

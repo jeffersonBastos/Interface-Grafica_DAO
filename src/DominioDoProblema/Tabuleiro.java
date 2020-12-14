@@ -5,20 +5,20 @@ import DominioDoProblema.Posicao;
 
 public class Tabuleiro {
 	
-	protected Posicao posicoes[][]; 
+	protected Posicao posicoes[][] = new Posicao[4][4];; 
 	protected Jogador jogadorLocal;
 	protected Jogador jogadorRemoto;
-	protected boolean partidaEmAndamento;
-	protected boolean jogadaEmAndamento;
+	protected boolean partidaEmAndamento = false;
 	protected EstadoDao estado;
 	
 	public Tabuleiro () {
-		posicoes =  new Posicao[4][4];
+		super();
 		this.inicia();
 	}
+	
 	public void inicia() {
 		partidaEmAndamento = false;
-		jogadaEmAndamento = false;
+
 		for (int linha=0; linha<4; linha++) {
 			for (int coluna=0; coluna<4; coluna++) {
 				posicoes[linha][coluna] = new Posicao(linha, coluna);
@@ -28,32 +28,23 @@ public class Tabuleiro {
 	}
 	
 	public void efetuarMovimentoPedra(Posicao posicaoAntiga, Posicao posicaoAtual) {
-		Jogador jogadorTurno;
-		boolean turnoLocal = jogadorLocal.informarTurno();
-		if (turnoLocal) jogadorTurno = jogadorLocal;
-			else jogadorTurno = jogadorRemoto;
-		posicaoAtual.definirOcupante(posicaoAntiga.getOcupante());
-		posicaoAntiga.
 		
-		matriz.colocarPedra(linha, coluna, jogadorTurno);
+		posicaoAtual.definirOcupante(posicaoAntiga.getOcupante());
+		posicaoAntiga.definirOcupante(null);
+		
 		this.avaliarEncerramentoPartida();
-		this.definirJogadaAndamento(true);
-		Lance lance = new Lance(false);
-		lance.definirPosicao(linha, coluna);
+		
+		Lance lance = new Lance();
+		
+		lance.definirPosicaoAntiga(posicaoAntiga.getLinha(),posicaoAntiga.getColuna());
+		lance.definirPosicaoAtual(posicaoAtual.getLinha(), posicaoAtual.getColuna());
+		
 		this.atualizarEstado(lance);
 		
 	}
 	
 	public Posicao obterPosicao(int linha, int coluna) {
 		return posicoes[linha][coluna];
-	}
-	
-	public void definirJogadaEmAndamento(boolean valor) {
-		jogadaEmAndamento = valor;		
-	}
-	
-	public EstadoDao informarEstado(Lance lance) {
-		return null;
 	}
 	
 	public String movimentarPedra(int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
@@ -82,22 +73,55 @@ public class Tabuleiro {
 		return estado;
 	}
 	
-	public void receberJogada(Lance lance) {
-		
+	public void iniciarNovaPartida(Integer ordem, String adversario) {
+		this.esvaziar();
+        this.jogadorLocal.iniciar();
+        this.jogadorRemoto = new Jogador();
+        this.jogadorRemoto.definirNome(adversario);
+        if (ordem.equals(1)) {
+            this.jogadorLocal.definirComoPrimeiro();
+        } else {
+            this.jogadorRemoto.definirComoPrimeiro();
+        }
+
+        this.partidaEmAndamento = true;
+        this.definirEstadoInicial();
+	}
+	
+	public void esvaziar() {
+		this.inicia();
+	}
+
+	public EstadoDao informarEstado(Lance lance) {
+		return estado;
 	}
 	
 	public boolean encerrarHavendoPartida() {
-		return false;
+		if (partidaEmAndamento) {
+			this.encerrarPartidaLocalmente();
+			return true;
+		} else return false;	
 	}
-	
-	public void iniciarNovaPartida(int ordem, String adversario) {
 		
+	public void definirEstadoInicial() {
+	        this.estado = new EstadoDao();
+	        if (this.jogadorLocal.informarTurno()) {
+	            this.estado.assumirMensagem("Vez de " + this.jogadorLocal.informarNome());
+	        } else {
+	            this.estado.assumirMensagem("Vez de " + this.jogadorRemoto.informarNome());
+	        }
+
+	        this.definirPartidaEmAndamento(true);
 	}
 	
-	public void iniciarTabuleiro() {
-		
+	public void encerrarPartidaLocalmente() {
+		 this.esvaziar();
+		 this.jogadorLocal.iniciar();
+		 this.jogadorRemoto = new Jogador();
+		 this.jogadorRemoto.iniciar();
+		 this.estado = new EstadoDao();
 	}
-	
+
 	public boolean encerrarPartida() {	
 		if (partidaEmAndamento) {
 			this.encerrarPartidaLocalmente();
@@ -105,9 +129,20 @@ public class Tabuleiro {
 		} else return false;
 	}
 	
-	public void encerrarPartidaLocalmente() {
+	public void receberJogada(Lance lance) {
+	    int linhaAntiga = lance.informarLinhaAntiga();
+	    int colunaAntiga = lance.informarColunaAntiga();
+	    int colunaAtual = lance.informarColunaAtual();
+	    int linhaAtual  = lance.informarLinhaAtual();
+	    
+	    Posicao posicaoAntiga = posicoes[linhaAntiga][colunaAntiga];
+	    Posicao posicaoAtual = posicoes[linhaAtual][colunaAtual];
+	    
 		
+		this.efetuarMovimentoPedra(posicaoAntiga, posicaoAtual);
+	        		
 	}
+	
 	public void registrarJogadorLocal(String jogador) {
 	        this.jogadorLocal = new Jogador();
 	        this.jogadorLocal.definirNome(jogador);
@@ -122,10 +157,8 @@ public class Tabuleiro {
 		EstadoDao novoEstado = new EstadoDao(lance);
 		String mensagem;
 		if (partidaEmAndamento) {
-			if (!jogadaEmAndamento) {
-				jogadorLocal.inverterTurno();
-				jogadorRemoto.inverterTurno();
-			}
+			jogadorLocal.inverterTurno();
+			jogadorRemoto.inverterTurno();
 			boolean turno = jogadorLocal.informarTurno();
 			String nome = jogadorRemoto.informarNome();
 			if (turno) nome = jogadorLocal.informarNome();
@@ -142,8 +175,8 @@ public class Tabuleiro {
 			}
 		}
 		novoEstado.assumirMensagem(mensagem);	
-		for (int linha=0; linha<6; linha++) {
-			for (int coluna=0; coluna<6; coluna++) {
+		for (int linha=0; linha<4; linha++) {
+			for (int coluna=0; coluna<4; coluna++) {
 				int valor = this.informarValor(linha, coluna);
 				novoEstado.assumirValorTabuleiro(linha, coluna, valor);
 			}

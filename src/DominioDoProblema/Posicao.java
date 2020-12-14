@@ -24,7 +24,7 @@ public class Posicao {
 		return (ocupante != null);
 	}
 	public boolean ocupadaPor(Jogador jogador) {
-		return (ocupante == jogador);
+		return (jogador.getCor() == ocupante.getCor());
 	}
 	public int getLinha() {
 		return this.linha;

@@ -70,9 +70,8 @@ public class AtorNetgames implements OuvidorProxy {
 
 	public String iniciarPartida() {
 		try {
-			proxy.iniciarPartida(new Integer(2)); // supondo 2 jogadores, o que pode ser alterado
+			proxy.iniciarPartida(new Integer(2)); 
 		} catch (NaoConectadoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "Falha ao tentar enviar solicitacao de inicio enviada a Netgames Server";
 		}
