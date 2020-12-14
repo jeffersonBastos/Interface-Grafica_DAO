@@ -12,7 +12,6 @@ public class Tabuleiro {
 	protected EstadoDao estado;
 	
 	public Tabuleiro () {
-		super();
 		this.inicia();
 	}
 	
@@ -24,6 +23,7 @@ public class Tabuleiro {
 				posicoes[linha][coluna] = new Posicao(linha, coluna);
 			}	
 		}
+
 		posicoes[3][0].definirOcupante(jogadorLocal); 
 		posicoes[2][1].definirOcupante(jogadorLocal);
 		posicoes[1][2].definirOcupante(jogadorLocal);
@@ -33,7 +33,7 @@ public class Tabuleiro {
 		posicoes[1][1].definirOcupante(jogadorRemoto);
 		posicoes[2][2].definirOcupante(jogadorRemoto);
 		posicoes[3][3].definirOcupante(jogadorRemoto);
-
+	
 	}
 	
 	public void efetuarMovimentoPedra(Posicao posicaoAntiga, Posicao posicaoAtual) {
@@ -83,7 +83,6 @@ public class Tabuleiro {
 	}
 	
 	public void iniciarNovaPartida(Integer ordem, String adversario) {
-		this.esvaziar();
         this.jogadorLocal.iniciar();
         this.jogadorRemoto = new Jogador();
         this.jogadorRemoto.definirNome(adversario);
@@ -95,6 +94,8 @@ public class Tabuleiro {
 
         this.partidaEmAndamento = true;
         this.definirEstadoInicial();
+		this.esvaziar();
+
 	}
 	
 	public void esvaziar() {
@@ -219,14 +220,19 @@ public class Tabuleiro {
 		RenquePosicao auxLinha;
 		RenquePosicao auxColuna;
 		RenquePosicao auxCanto;
+		
 		if (jogadorLocal.informarTurno()) {
 			jogadorTurno = jogadorLocal;
 			adversario = jogadorRemoto;
 		} else {
 			jogadorTurno = jogadorRemoto;
-			adversario = jogadorLocal;		}
+			adversario = jogadorLocal;		
+		}
+		
 		for (int indice=0; indice<4; indice++) {		// avaliacao de linhas
+			
 			auxLinha = this.informarLinha(indice);
+			
 			if (!adversarioVencedor) {
 				adversarioVencedor = auxLinha.avaliarCondicaoVitoria(adversario);
 			}
@@ -273,7 +279,7 @@ public class Tabuleiro {
 	
 	public RenquePosicao informarLinha(int indice) {
 		Posicao linha[] = new Posicao[4];
-		for(int coluna = 0;coluna > 4; coluna ++) {
+		for(int coluna = 0;coluna < 4; coluna ++) {
 			linha[coluna] = posicoes[indice][coluna];	
 		}
 		RenquePosicao renqueLinha = new RenquePosicao(linha, false);
@@ -282,7 +288,7 @@ public class Tabuleiro {
 	
 	public RenquePosicao informarColuna(int indice) {
 		Posicao coluna[] = new Posicao[4];
-		for(int linha = 0;linha > 4; linha ++) {
+		for(int linha = 0;linha < 4; linha ++) {
 			coluna[linha] = posicoes[linha][indice];	
 		}
 		RenquePosicao renqueLinha = new RenquePosicao(coluna, false);

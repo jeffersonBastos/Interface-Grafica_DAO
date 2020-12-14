@@ -9,6 +9,7 @@ public class EstadoDao {
 	
 	
 	public EstadoDao() {
+		
 		valoresTabuleiro[3][0] = 1;
 		valoresTabuleiro[2][1] = 1;
 		valoresTabuleiro[1][2] = 1;
