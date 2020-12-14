@@ -3,38 +3,43 @@ package DominioDoProblema;
 
 public class Jogador {
 	protected String nome;
-	protected int cor;
-	protected boolean seuTurno;
-	protected boolean vencedor;
+	protected int cor = 2;
+	protected boolean seuTurno = false;
+	protected boolean vencedor = false;
 	
-	public Jogador(String nome, int cor, boolean seuTurno, boolean vencedor) {
-		this.nome = nome;
-		this.cor = cor;
-		this.seuTurno = seuTurno;
-		this.vencedor = vencedor;
-	}
-	
-	
-	public boolean informarTurno() {
-		return seuTurno;
+	public Jogador(String nome) {
+		this.nome = nome;	
 	}
 	
 	public void iniciar() {
 		
 	}
+	public void setTurno() {
+		seuTurno = true;
+	}
+	public boolean informarTurno() {
+		return seuTurno;
+	}
 	
-	public void definirNome(String adversario) {
-		
+	public String getNome() {
+		return nome;
+	}
+	
+	
+	public void setNome(String nome) {
+		this.nome = nome;		
 	}
 	
 	public void definirComoPrimeiro() {
+		cor = 1;
+		seuTurno = true;
 		
 	}
 	public int getCor() {
 		return cor;
 	}
 	public void inverterTurno() {
-		if(seuTurno == true) {
+		if(seuTurno) {
 			seuTurno = false;
 		}else {
 			seuTurno = true;
@@ -44,11 +49,13 @@ public class Jogador {
 	public String informarNome() {
 		return nome;
 	}
-	
+	public void definirVencedor(boolean valor) {
+		vencedor = valor;
+	}
 	public boolean informarVencedor() {
 		return vencedor;
 	}
-	
+	//tem q estar aqui RONALDO??
 	public boolean avaliarCondicaoVitoria(Jogador jogador) {
 		return false;
 	}

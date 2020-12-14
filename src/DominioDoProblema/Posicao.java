@@ -21,18 +21,10 @@ public class Posicao {
 	}
 	
 	public boolean informarOcupada() {
-		if(ocupante == null) {
-			return false;
-		}
-		return true;
+		return (ocupante != null);
 	}
 	public boolean ocupadaPor(Jogador jogador) {
-		if(ocupante == null) {
-			return false;
-		}else if(jogador.getCor() == ocupante.getCor()){
-			return true;
-		}
-		return false;
+		return (ocupante == jogador);
 	}
 	public int getLinha() {
 		return this.linha;
@@ -41,6 +33,9 @@ public class Posicao {
 	public int getColuna() {
 		return this.coluna;
 		
+	}
+	public Jogador getOcupante() {
+		return ocupante;
 	}
 	
 }

@@ -1,28 +1,29 @@
 package DominioDoProblema;
 
-public class Lance {
+//import br.ufsc.inf.leobr.cliente.Jogada;
 
-	protected int linhaAtual;
-	protected int colunaAtual;
-	protected int linhaAntiga;
-	protected int colunaAntiga;
+public class Lance {
+    
+//	private static final long serialVersionUID = 1L;
+	protected int linhaAtual = 0;
+	protected int colunaAtual = 0;
+	protected int linhaAntiga = 0;
+	protected int colunaAntiga = 0;
 	
 	
-	public Lance(int linhaAtual, int colunaAtual, int linhaAntiga, int colunaAntiga) {
-		this.linhaAtual = linhaAtual;
-		this.colunaAtual = colunaAtual;
-		this.linhaAntiga = linhaAntiga;
-		this.colunaAntiga = colunaAntiga;
+	public Lance() {
 	}
 	
-	public void definirPosicao(int linha, int coluna) {
+	public void definirPosicaoAntiga(int linha, int coluna) {
+		linhaAntiga = linha;
+		colunaAntiga = coluna;
+	}
+	
+	public void definirPosicaoAtual(int linha, int coluna) {
+		linhaAtual = linha;
+		colunaAtual = coluna;
+	}
 		
-	}
-	
-	public void definirPosicaoAntiga() {
-		
-	}
-	
 	public Posicao informarPosicao(int linha, int coluna) {
 		return null;
 	}

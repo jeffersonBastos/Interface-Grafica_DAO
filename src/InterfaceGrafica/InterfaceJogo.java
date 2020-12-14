@@ -156,6 +156,7 @@ public class InterfaceJogo {
 				move(button_00, 1, 1);
 			}
 		});
+		
 		button_00.setHideActionText(true);
 		button_00.setIcon(pecaPreta);
 		button_00.setBounds(10, 32, 80, 80);

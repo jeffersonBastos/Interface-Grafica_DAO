@@ -2,18 +2,36 @@ package DominioDoProblema;
 
 public class EstadoDao {
 
-	protected String mensagem;
-	protected Lance lance;
-	protected int[][] valoresTabuleiro;
+	protected String mensagem = "Jogo DAO - aguardando iniciar partida";
+	protected Lance lance = new Lance();
+	protected int[][] valoresTabuleiro = new int [4][4];
+		
 	
-	public EstadoDao(String mensagem, Lance lance, int[][] valoresTabuleiro) {
-		this.mensagem = mensagem;
-		this.lance = lance;
-		this.valoresTabuleiro = valoresTabuleiro;
+	
+	public EstadoDao() {
+		
 	}
-	
+
+	public EstadoDao(Lance lance) {
+		this.lance = lance;
+	}
+	public void assumirMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
 	public Lance informarLance() {
 		return lance;
 	}
 	
+	public String informarMensagem() {
+		return mensagem;
+	}
+	
+	public void assumirValorTabuleiro(int linha, int coluna, int valor) {
+		valoresTabuleiro [linha] [coluna] = valor;
+	}
+	
+	public int informarValorTabuleiro(int linha, int coluna) {
+		return valoresTabuleiro [linha] [coluna];
+	}
+
 }

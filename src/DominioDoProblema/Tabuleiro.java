@@ -10,12 +10,15 @@ public class Tabuleiro {
 	protected Jogador jogadorRemoto;
 	protected boolean partidaEmAndamento;
 	protected boolean jogadaEmAndamento;
+	protected EstadoDao estado;
 	
 	public Tabuleiro () {
 		posicoes =  new Posicao[4][4];
 		this.inicia();
 	}
 	public void inicia() {
+		partidaEmAndamento = false;
+		jogadaEmAndamento = false;
 		for (int linha=0; linha<4; linha++) {
 			for (int coluna=0; coluna<4; coluna++) {
 				posicoes[linha][coluna] = new Posicao(linha, coluna);
@@ -33,7 +36,7 @@ public class Tabuleiro {
 	}
 	
 	public void definirJogadaEmAndamento(boolean valor) {
-		
+		jogadaEmAndamento = valor;		
 	}
 	
 	public EstadoDao informarEstado(Lance lance) {
@@ -71,11 +74,106 @@ public class Tabuleiro {
 	public void encerrarPartidaLocalmente() {
 		
 	}
+	public void assumirEstado(EstadoDao estado) {
+		this.estado = estado;
+	}
 	
 	public void atualizarEstado(Lance lance) {
+		EstadoDao novoEstado = new EstadoDao(lance);
+		String mensagem;
+		if (partidaEmAndamento) {
+			if (!jogadaEmAndamento) {
+				jogadorLocal.inverterTurno();
+				jogadorRemoto.inverterTurno();
+			}
+			boolean turno = jogadorLocal.informarTurno();
+			String nome = jogadorRemoto.informarNome();
+			if (turno) nome = jogadorLocal.informarNome();
+			mensagem = "Vez de "+nome;
+		} else {
+			boolean localVencedor = jogadorLocal.informarVencedor();
+			boolean remotoVencedor = jogadorRemoto.informarVencedor();
+			if (localVencedor || remotoVencedor) {
+				String nome = jogadorRemoto.informarNome();
+				if (localVencedor) nome = jogadorLocal.informarNome();
+				mensagem = "VENCEDOR: "+nome;
+			} else {
+				mensagem = "Partida encerrada sem vencedor";
+			}
+		}
+		novoEstado.assumirMensagem(mensagem);	
+		for (int linha=0; linha<6; linha++) {
+			for (int coluna=0; coluna<6; coluna++) {
+				int valor = this.informarValor(linha, coluna);
+				novoEstado.assumirValorTabuleiro(linha, coluna, valor);
+			}
+		}
+		this.assumirEstado(novoEstado);
 		
 	}
+	
+	public int informarValor(int linha, int coluna) {
+		int valor;
+		Posicao posicao = posicoes[linha][coluna];
+		boolean ocupada = posicao.informarOcupada();
+		if (ocupada) {
+			Jogador jogador = posicao.getOcupante();
+			valor = jogador.getCor();
+		} else {
+			valor = 0;
+		}
+		return valor;
+	}
+	
+	public void definirPartidaEmAndamento(boolean valor) {	
+		partidaEmAndamento = valor;
+	}
+	
 	public void avaliarEncerramentoPartida() {
+		Jogador jogadorTurno;
+		Jogador adversario;
+		boolean adversarioVencedor = false;
+		boolean registroTurnoVencedor = false;
+		RenquePosicao auxLinha;
+		RenquePosicao auxColuna;
+		RenquePosicao auxCanto;
+		if (jogadorLocal.informarTurno()) {
+			jogadorTurno = jogadorLocal;
+			adversario = jogadorRemoto;
+		} else {
+			jogadorTurno = jogadorRemoto;
+			adversario = jogadorLocal;		}
+		for (int indice=0; indice<4; indice++) {		// avaliacao de linhas
+			auxLinha = this.informarLinha(indice);
+			if (!adversarioVencedor) adversarioVencedor = auxLinha.avaliarCondicaoVitoria(adversario);
+			if (!adversarioVencedor) 
+				if (!registroTurnoVencedor) registroTurnoVencedor = auxLinha.avaliarCondicaoVitoria(jogadorTurno);
+		}
+		if (!adversarioVencedor) {
+			for (int indice=0; indice<6; indice++) {	// avaliacao de colunas
+				auxColuna = this.informarColuna(indice);
+				if (!adversarioVencedor) adversarioVencedor = auxColuna.avaliarCondicaoVitoria(adversario);
+				if (!adversarioVencedor) 
+					if (!registroTurnoVencedor) registroTurnoVencedor = auxColuna.avaliarCondicaoVitoria(jogadorTurno);
+			}
+		}
+		if (!adversarioVencedor) {
+			for (int indice=0; indice<6; indice++) {	// avaliacao de cantos
+				auxCanto = this.informarCanto(indice);
+				if (!adversarioVencedor) adversarioVencedor = auxCanto.avaliarCondicaoVitoria(adversario);
+				if (!adversarioVencedor) 
+					if (!registroTurnoVencedor) registroTurnoVencedor = auxCanto.avaliarCondicaoVitoria(jogadorTurno);
+			}
+		}
+		if (adversarioVencedor) {		// verificacao de existencia de vencedor
+			adversario.definirVencedor(true);
+			this.definirPartidaEmAndamento(false);
+		} else {
+			if (registroTurnoVencedor) {
+				jogadorTurno.definirVencedor(true);
+				this.definirPartidaEmAndamento(false);
+			}
+		}
 		
 	}
 	
@@ -87,6 +185,7 @@ public class Tabuleiro {
 		RenquePosicao renqueLinha = new RenquePosicao(linha, false);
 		return renqueLinha;
 	}
+	
 	public RenquePosicao informarColuna(int indice) {
 		Posicao coluna[] = new Posicao[4];
 		for(int linha = 0;linha > 4; linha ++) {
@@ -95,7 +194,8 @@ public class Tabuleiro {
 		RenquePosicao renqueLinha = new RenquePosicao(coluna, false);
 		return renqueLinha;
 	}
-	public RenquePosicao informaCanto(int indiceCanto) {
+	
+	public RenquePosicao informarCanto(int indiceCanto) {
 		Posicao canto[] = new Posicao[4];
 		switch (indiceCanto) {
 		case 1:
@@ -129,6 +229,7 @@ public class Tabuleiro {
 		RenquePosicao renqueLinha = new RenquePosicao(canto, true);
 		return renqueLinha;	
 	}
+	
 	public boolean avaliaMovimentoLinha(int linhaAtual, int colunaAtual, int colunaAntiga, int diferencaColuna) {		    
 		
 		
@@ -160,6 +261,7 @@ public class Tabuleiro {
 		        return true;
 	    }
 	}
+	
 	public boolean avaliaMovimentoColuna(int colunaAtual, int linhaAtual,int linhaAntiga,int diferencaLinha) {
 	    if(diferencaLinha > 0){
 	        //andou para baixo
@@ -188,6 +290,7 @@ public class Tabuleiro {
 	        return true;
 	    }
 	}
+	
 	public boolean avaliaMovimentoDiagonal(int linhaAtual, int linhaAntiga, int colunaAntiga, int colunaAtual, int diferencaLinha) {
         
 		if(linhaAtual > linhaAntiga && colunaAtual > colunaAntiga){
@@ -262,6 +365,7 @@ public class Tabuleiro {
 		}
 		return false;
 	}	
+	
 	public boolean avaliarMovimento(Posicao posicaoAntiga, Posicao posicaoAtual) {
 		
 		System.out.println("RONALDO");
