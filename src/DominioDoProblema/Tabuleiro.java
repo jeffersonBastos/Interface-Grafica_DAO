@@ -468,7 +468,6 @@ public class Tabuleiro {
 	
 	public boolean avaliarMovimento(Posicao posicaoAntiga, Posicao posicaoAtual) {
 		
-		System.out.println("RONALDO");
 		
 		int linhaAntiga = posicaoAntiga.getLinha();
 		int colunaAntiga = posicaoAntiga.getColuna();
@@ -479,22 +478,17 @@ public class Tabuleiro {
 
 		if(linhaAtual == linhaAntiga && linhaAntiga == linhaAtual) {
 			//NAO ANDOU
-			System.out.println("Ronaldo- nao andou");
 			return false;
 		}else if(linhaAntiga == linhaAtual){
 			//ANDOU EM LINHA
-			System.out.println("Ronaldo- andou linha");
 			return this.avaliaMovimentoLinha(linhaAtual, colunaAtual, colunaAntiga, diferencaColuna);
 		} else if(colunaAntiga == colunaAtual){
 			//ANDOU EM COLUNA
-			System.out.println("Ronaldo- andou coluna");
 			return this.avaliaMovimentoColuna(colunaAtual, linhaAtual, linhaAntiga, diferencaLinha);
 		}else if( Math.abs(colunaAtual - colunaAntiga) == Math.abs(linhaAtual - linhaAntiga)  ){
 			//ANDOU EM DIAGONAL
-			System.out.println("Ronaldo- andou diagona");
 			return this.avaliaMovimentoDiagonal(linhaAtual, linhaAntiga, colunaAntiga, colunaAtual, diferencaLinha);
 		}else {
-			System.out.println("Ronaldo- caiu no ultimo else");
 			return false;
 		}	
 	}	

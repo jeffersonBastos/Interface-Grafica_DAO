@@ -377,12 +377,10 @@ public class InterfaceJogo {
 	
 	public void move(JButton button, int linha, int coluna) {
 		if(primeiraAcao) {
-			System.out.println("primeira açao");
 			removePeca(button);
 			linhaAntiga = linha;
 			colunaAntiga = coluna;
 		}else {
-			System.out.println("2 ação");
 			putPeca(button, linhaAntiga, colunaAntiga, linha, coluna);
 			linhaAtual = linha;
 			colunaAtual = coluna;
@@ -402,7 +400,6 @@ public class InterfaceJogo {
 		}		
 	} 
 	public void putPeca(JButton button, int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
-		System.out.println("RONALDO");
 		
 		if(button.getIcon().equals(posicaoVazia)) {
 			String notificacao = atorJogador.movimentarPedra(linhaAntiga, colunaAntiga, linhaAtual, colunaAtual);
