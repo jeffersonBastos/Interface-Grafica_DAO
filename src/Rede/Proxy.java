@@ -1,14 +1,15 @@
 package Rede;
 
+import DominioDoProblema.Lance;
+
 public class Proxy {
 	protected AtorNetgames ator;
 	
 	public Proxy(AtorNetgames ator) {
 		this.ator = ator;
 	}
+	public void enviarJogada(Lance lance) {
 	
-	public void enviarJogada(DominioDoProblema.Lance lance) {
-		
 	}
 	
 	public void conectar(String servidor, String jogador) {

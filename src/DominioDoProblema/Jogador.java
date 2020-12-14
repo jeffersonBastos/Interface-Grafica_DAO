@@ -7,10 +7,6 @@ public class Jogador {
 	protected boolean seuTurno = false;
 	protected boolean vencedor = false;
 	
-	public Jogador(String nome) {
-		this.nome = nome;	
-	}
-	
 	public void iniciar() {
 		
 	}
@@ -58,6 +54,10 @@ public class Jogador {
 	//tem q estar aqui RONALDO??
 	public boolean avaliarCondicaoVitoria(Jogador jogador) {
 		return false;
+	}
+
+	public void definirNome(String jogador) {
+		nome = jogador;
 	}
 	
 

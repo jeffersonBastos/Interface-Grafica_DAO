@@ -27,7 +27,20 @@ public class Tabuleiro {
 		}
 	}
 	
-	public void efetuarMovimentoPedra(int linha, int coluna, Jogador jogador) {
+	public void efetuarMovimentoPedra(Posicao posicaoAntiga, Posicao posicaoAtual) {
+		Jogador jogadorTurno;
+		boolean turnoLocal = jogadorLocal.informarTurno();
+		if (turnoLocal) jogadorTurno = jogadorLocal;
+			else jogadorTurno = jogadorRemoto;
+		posicaoAtual.definirOcupante(posicaoAntiga.getOcupante());
+		posicaoAntiga.
+		
+		matriz.colocarPedra(linha, coluna, jogadorTurno);
+		this.avaliarEncerramentoPartida();
+		this.definirJogadaAndamento(true);
+		Lance lance = new Lance(false);
+		lance.definirPosicao(linha, coluna);
+		this.atualizarEstado(lance);
 		
 	}
 	
@@ -43,12 +56,30 @@ public class Tabuleiro {
 		return null;
 	}
 	
-	public String movimentarPedra(int linham, int coluna) {
-		return null; 
+	public String movimentarPedra(int linhaAntiga, int colunaAntiga, int linhaAtual, int colunaAtual) {
+		String notificacao = "";
+		Posicao posicaoAntiga = this.obterPosicao(linhaAntiga, colunaAntiga);
+		Posicao posicaoAtual = this.obterPosicao(linhaAtual, colunaAtual);
+		
+		if (partidaEmAndamento) {
+			boolean turno = jogadorLocal.informarTurno();
+			if (turno) {
+				if(avaliarMovimento(posicaoAntiga, posicaoAtual)) {
+					this.efetuarMovimentoPedra(posicaoAntiga, posicaoAtual);
+				} else {
+					notificacao = "Movimento não e valido";
+				}
+		    } else {
+				notificacao = "Nao e seu turno";
+			}
+		} else {
+			notificacao = "Nao ha partida em andamento";
+		}
+		return notificacao;	
 	}
 	
 	public EstadoDao informarEstado() {
-		return null;
+		return estado;
 	}
 	
 	public void receberJogada(Lance lance) {
@@ -67,13 +98,22 @@ public class Tabuleiro {
 		
 	}
 	
-	public void encerrarPartida() {
-		
+	public boolean encerrarPartida() {	
+		if (partidaEmAndamento) {
+			this.encerrarPartidaLocalmente();
+			return true;
+		} else return false;
 	}
 	
 	public void encerrarPartidaLocalmente() {
 		
 	}
+	public void registrarJogadorLocal(String jogador) {
+	        this.jogadorLocal = new Jogador();
+	        this.jogadorLocal.definirNome(jogador);
+	        this.jogadorLocal.iniciar();
+	}
+	
 	public void assumirEstado(EstadoDao estado) {
 		this.estado = estado;
 	}

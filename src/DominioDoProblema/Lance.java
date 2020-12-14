@@ -1,10 +1,10 @@
 package DominioDoProblema;
 
-//import br.ufsc.inf.leobr.cliente.Jogada;
+import br.ufsc.inf.leobr.cliente.Jogada;
 
-public class Lance {
+public class Lance implements Jogada {
     
-//	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	protected int linhaAtual = 0;
 	protected int colunaAtual = 0;
 	protected int linhaAntiga = 0;
